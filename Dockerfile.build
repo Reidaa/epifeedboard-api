@@ -1,0 +1,16 @@
+FROM node
+
+WORKDIR /app
+
+COPY package.json .
+COPY prisma ./prisma/
+COPY tsconfig.json .
+
+RUN npm install --silent
+RUN npx prisma generate
+
+COPY . .
+
+EXPOSE 8080
+
+CMD ["npm", "run", "build"]
