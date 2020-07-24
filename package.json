@@ -19,6 +19,7 @@
 		"decrypt": "node scripts/crypt-env.js --decrypt"
 	},
 	"dependencies": {
+		"@prisma/client": "^2.3.0",
 		"axios": "^0.19.2",
 		"bcrypt": "^5.0.0",
 		"body-parser": "^1.19.0",
@@ -39,7 +40,6 @@
 	},
 	"devDependencies": {
 		"@prisma/cli": "^2.3.0",
-		"@prisma/client": "^2.3.0",
 		"@types/bcrypt": "^3.0.0",
 		"@types/body-parser": "^1.19.0",
 		"@types/chai": "^4.2.12",
@@ -82,6 +82,6 @@
 		"typescript": "^3.9.7"
 	},
 	"engines": {
-		"node": "10.x"
+		"node": ">=10.0.0"
 	}
 }
