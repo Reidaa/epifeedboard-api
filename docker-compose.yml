@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+
+  api:
+    build:
+      context: Api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  api_build:
+    build:
+      context: Api
+      dockerfile: Dockerfile.build
+
+  api_test:
+    build:
+      context: Api
+      dockerfile: Dockerfile.test
+
+volumes:
+  db:

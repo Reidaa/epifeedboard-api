@@ -1,0 +1,25 @@
+image: docker:latest
+
+stages:
+  - build
+  - test
+
+services:
+  - docker:dind
+
+before_script:
+  - apk update
+  - apk upgrade
+  - apk add --no-cache py3-pip python3-dev libffi-dev openssl-dev gcc libc-dev make
+  - pip install docker-compose
+
+
+api:
+  stage: build
+  script:
+    - docker-compose up api_build
+
+api_test:
+  stage: test
+  script:
+    - docker-compose up api_test
