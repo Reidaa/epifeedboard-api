@@ -48,8 +48,8 @@ export async function getNews(req: Request, res: Response): Promise<Response> {
         const response = await axios.get(url);
         const {data} = response;
         return res.status(Code.OK).json({data});
-    } catch {
-        return res.status(Code.INTERNAL_SERVER_ERROR).json();
+    } catch (err) {
+        return res.status(Code.INTERNAL_SERVER_ERROR).json({err});
     }
 
 }
