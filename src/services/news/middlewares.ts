@@ -30,9 +30,9 @@ export async function getNews(req: Request, res: Response): Promise<Response> {
     const {sources = "", category = "", country = ""} = req.query;
 
     if (!arrayContains({thing: category, arrayOfThings: categories}))
-        return res.status(Code.BAD_REQUEST).json();
+        return res.sendStatus(Code.BAD_REQUEST);
     if (!arrayContains({thing: country, arrayOfThings: countries}))
-        return res.status(Code.BAD_REQUEST).json();
+        return res.sendStatus(Code.BAD_REQUEST);
 
     let url = `${baseUrl}/top-headlines?apiKey=${newsApiKey}`;
     url += (sources === "" ? "" : `&sources=${sources}`);
@@ -59,7 +59,12 @@ export async function getNews(req: Request, res: Response): Promise<Response> {
 export async function search(req: Request, res: Response): Promise<Response> {
     const {search, language} = req.query;
 
+    if (!search) {
+        return res.sendStatus(Code.BAD_REQUEST);
+    }
+
     const url = `${baseUrl}/everything?apiKey=${newsApiKey}&q=${search}&language=${language}`;
+
 
     try {
         const {data} = await axios.get(url);

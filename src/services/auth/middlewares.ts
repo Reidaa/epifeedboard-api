@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response} from "express";
 import {Bearer} from "permit";
 import * as jwt from "jsonwebtoken";
+import {User} from "@prisma/client";
 
-import {User} from "../../types";
 import {getByID} from "../user/controller";
 import logger from "../../utils/logger";
 

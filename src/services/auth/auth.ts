@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import {User} from "../../types";
+import {User} from "@prisma/client";
 
 const jwtKey = process.env["JWT_KEY"];
 

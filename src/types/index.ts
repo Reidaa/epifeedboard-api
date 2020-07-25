@@ -1,6 +1,4 @@
-import {UserGetPayload} from "@prisma/client";
-
-export type User = UserGetPayload<{}>
+import {User} from "@prisma/client";
 
 
 declare global {
@@ -31,16 +29,16 @@ export enum Code {
     SERVICE_UNAVAILABLE = 503,
 }
 
-export const Error = {
+export type ResponseError = {
     "errors": [
         {
-            "domain": "",
-            "reason": "",
-            "message": " ",
-            "locationType": "",
-            "location": ""
+            "domain": String
+            "reason": String,
+            "message": String,
+            "locationType": String,
+            "location": String
         }
     ],
-    "code": 0,
-    "message": ""
+    "code": Code,
+    "message": String
 };

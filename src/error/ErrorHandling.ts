@@ -1,4 +1,5 @@
-import {Error} from "../types";
+import {ResponseError} from "../types";
+import {Response} from "express";
 
 
 export function ManageErrorMessage(
@@ -8,18 +9,25 @@ export function ManageErrorMessage(
     locationType = "header",
     location = "somewhere",
     code = 400,
-    explicitMessage = "error"): {errors: {domain: string, reason: string, message: string, locationType: string, location: string}[], code: number, message: string} {
+    explicitMessage = "error"): ResponseError { 
 
-    const error = Error;
-
-    error["errors"][0].domain = domain;
-    error["errors"][0].reason = reason;
-    error["errors"][0].message = message;
-    error["errors"][0].locationType = locationType;
-    error["errors"][0].location = location;
-
-    error["code"] = code;
-    error["message"] = explicitMessage;
+    const error: ResponseError = {
+        errors: [
+            {
+                domain,
+                reason,
+                message,
+                locationType,
+                location
+            }
+        ],
+        code,
+        message: explicitMessage
+    };
 
     return error;
+}
+
+export function sendError({res, err}: {res: Response, err: ResponseError}): Response {
+    return res.status(err.code).json({err});
 }

@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {Code} from "../../../types";
 import * as NewsController from "../controller";
-import {ManageErrorMessage} from "../../../error/ErrorHandling";
+import {ManageErrorMessage, sendError} from "../../../error/ErrorHandling";
 
 
 /**
@@ -14,7 +14,7 @@ import {ManageErrorMessage} from "../../../error/ErrorHandling";
 export async function favoriteCategory(req: Request, res: Response): Promise<Response> {
     const {user} = req;
 
-    const {category, status} = req.body;
+    const {category, status} = req.query;
 
 
     if (!user) {
@@ -35,16 +35,15 @@ export async function favoriteCategory(req: Request, res: Response): Promise<Res
             "category / status",
             Code.BAD_REQUEST,
             "The category or the status was undefined");
-
-        return res.status(Code.BAD_REQUEST).json({error});
+        return sendError({res, err: error});
     }
 
     try {
         if (status === "like") {
-            const favoriteCategory = await NewsController.findOrCreate(category, user.id);
+            const favoriteCategory = await NewsController.findOrCreate(String(category), user.id);
             return res.status(Code.OK).json({favoriteCategory});
         } else if (status === "dislike") {
-            const favoriteCategory = await NewsController.deleteCategory(category, user.id);
+            const favoriteCategory = await NewsController.deleteCategory(String(category), user.id);
             return res.status(Code.OK).json({favoriteCategory});
         } else {
             const error = ManageErrorMessage("global",

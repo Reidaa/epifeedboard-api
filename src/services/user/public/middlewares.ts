@@ -1,10 +1,11 @@
 import {Request, Response} from "express";
 import bcrypt from "bcrypt";
+import {User} from "@prisma/client";
 
 import * as controller from "../controller";
 import {create, getByUsername, updateLanguage} from "../controller";
 import logger from "../../../utils/logger";
-import {Code, User} from "../../../types";
+import {Code} from "../../../types";
 import {generateAuthToken} from "../../auth/auth";
 
 
@@ -12,21 +13,20 @@ import {generateAuthToken} from "../../auth/auth";
 * This function look for an existing user in the database with the username and id passed
  * @returns 200 if OK
 */
-
 export async function getUser(req: Request, res: Response): Promise<Response> {
-    const {username, id} = req.body;
+    const {username, id} = req.query;
     let user: User | null = null;
 
     if (!username && !id)
         return res.sendStatus(Code.BAD_REQUEST);
     try {
         if (id) {
-            user = await controller.getByID(id);
+            user = await controller.getByID(String(id));
         } else if (username) {
             if (username === "me") {
                 user = req.user;
             } else {
-                user = await controller.getByUsername(username);
+                user = await controller.getByUsername(String(username));
             }
         }
         if (!user) {
@@ -44,7 +44,6 @@ export async function getUser(req: Request, res: Response): Promise<Response> {
  * This function try to login an user with the username and password passed
  * @returns 200 if OK
  */
-
 export async function login(req: Request, res: Response): Promise<Response> {
     const {username, password} = req.body;
 
@@ -69,7 +68,6 @@ export async function login(req: Request, res: Response): Promise<Response> {
  * This function try to register an user with an email, an username and a password passed
  * @returns 200 if OK
  */
-
 export async function register(req: Request, res: Response): Promise<Response> {
     const {email, username, password} = req.body;
 
@@ -84,11 +82,10 @@ export async function register(req: Request, res: Response): Promise<Response> {
 
 export async function setLanguage(req: Request, res: Response): Promise<Response> {
     const {user} = req;
-
-    const {language} = req.body;
+    const {language} = req.query;
 
     if (!(user || language))
         return res.sendStatus(Code.BAD_REQUEST);
-    const updated_user = await updateLanguage(user.id, language);
+    const updated_user = await updateLanguage(user.id, String(language));
     return res.status(Code.CREATED).json({updated_user});
 }
