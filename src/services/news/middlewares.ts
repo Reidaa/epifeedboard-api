@@ -1,16 +1,11 @@
 import {Request, Response} from "express";
 import axios from "axios";
 
-import {Code} from "../../../types";
-import {arrayContains} from "../../../utils/helper";
+import {Code} from "../../types";
+import {arrayContains} from "../../utils/helper";
 
 const newsApiKey = process.env["NEWS_API_KEY"];
 const baseUrl = "http://newsapi.org/v2";
-
-/**
- * This function look for the last news on the Google News API
- * @returns 200 if OK
- */
 
 const categories = [
     "business",
@@ -62,11 +57,15 @@ export async function getNews(req: Request, res: Response): Promise<Response> {
  * @returns 200 if OK
  */
 export async function search(req: Request, res: Response): Promise<Response> {
-    const {search, language} = req.body;
+    const {search, language} = req.query;
 
-    const url = `http://newsapi.org/v2/everything?q=${search}&language=${language}&apiKey=${newsApiKey}`;
+    const url = `${baseUrl}/everything?apiKey=${newsApiKey}&q=${search}&language=${language}`;
 
-    const {data} = await axios.get(url);
+    try {
+        const {data} = await axios.get(url);
+        return res.status(Code.OK).json({data});
+    } catch (err) {
+        return res.status(Code.INTERNAL_SERVER_ERROR).json({err});
+    }
 
-    return res.status(Code.OK).json({data});
 }

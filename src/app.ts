@@ -6,7 +6,7 @@ import "./utils/secrets";
 
 import usersRouter from "./services/user/routes";
 import authRouter from "./services/auth/routes";
-import newsAPIRouter from "./services/News/routes";
+import newsAPIRouter from "./services/news/routes";
 import favCategoriesAPIRouter from "./services/favCategories/routes";
 import favSourcesAPIRouter from "./services/favSource/routes";
 import logger from "./utils/logger";
